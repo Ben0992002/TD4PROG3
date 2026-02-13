@@ -47,6 +47,7 @@ values (1, 1, 1, 0.2, 'KG'),
 DELETE FROM "order" WHERE id IN (1, 2); -- Sécurité pour éviter les erreurs de doublons
 
 INSERT INTO "order" (id, reference, type, status, creation_datetime)
+
 VALUES
     (1, 'ORD100', 'TAKE_AWAY', 'DELIVERED', '2024-01-06 12:00'),
     (2, 'ORD102', 'EAT_IN', 'CREATED', '2024-01-06 12:00');
