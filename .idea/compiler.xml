@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="evaluation-k1-garage" />
         <module name="td4-gestion-stocks" />
       </profile>
     </annotationProcessing>
