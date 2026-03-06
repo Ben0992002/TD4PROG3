@@ -1,14 +1,20 @@
 package org.example;
 
+<<<<<<< HEAD
 import org.example.model.CandidateVoteCount;
 import org.example.model.VoteTypeCount;
 import org.example.repository.DataRetriever;
 
 import java.sql.*;
+=======
+import org.example.repository.GarageRetriever;
+import org.example.model.StatsReparation;
+>>>>>>> sauvegarde-travail
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+<<<<<<< HEAD
         // Configuration de la connexion
         String url = "jdbc:postgresql://localhost:5432/election_db";
         String user = "election_user";
@@ -48,6 +54,27 @@ public class Main {
         } catch (SQLException e) {
             System.err.println("Erreur de connexion ou de requête : " + e.getMessage());
             e.printStackTrace();
+=======
+        GarageRetriever retriever = new GarageRetriever();
+
+        System.out.println("--- Question (a) ---");
+        for (StatsReparation s : retriever.findNombreReparationsParModele()) {
+            System.out.println(s.marque() + " " + s.modele() + " : " + s.nombreReparations());
+        }
+
+        System.out.println("\n--- Question (b) ---");
+        retriever.displayPourcentagesParModele();
+
+        System.out.println("\n--- Question (c) ---");
+        for (StatsReparation s : retriever.findCoutParMarqueEtMecanicien()) {
+            System.out.println(s.marque() + " | " + s.nomMecanicien() + " : " + s.montantTotal() + " Ar");
+        }
+
+        System.out.println("\n--- Question (d) ---");
+        StatsReparation moins = retriever.findMoinsRentable();
+        if (moins != null) {
+            System.out.println("Nom : " + moins.nomMecanicien() + " | Total : " + moins.montantTotal());
+>>>>>>> sauvegarde-travail
         }
     }
 }
