@@ -1,88 +1,19 @@
-create type dish_type as enum ('STARTER', 'MAIN', 'DESSERT');
+-- Suppression des tables si elles existent (pour repartir à zéro)
+DROP TABLE IF EXISTS vente;
+DROP TABLE IF EXISTS voiture;
 
-
-create table dish
-(
-    id        serial primary key,
-    name      varchar(255),
-    dish_type dish_type
+-- Table des modèles de voitures
+CREATE TABLE voiture (
+                         id_voiture SERIAL PRIMARY KEY,
+                         marque VARCHAR(50) NOT NULL,
+                         modele VARCHAR(50),
+                         prix_unitaire DECIMAL(10, 2) NOT NULL
 );
 
-create type ingredient_category as enum ('VEGETABLE', 'ANIMAL', 'MARINE', 'DAIRY', 'OTHER');
-
-create table ingredient
-(
-    id       serial primary key,
-    name     varchar(255),
-    price    numeric(10, 2),
-    category ingredient_category
+-- Table des ventes liées aux voitures
+CREATE TABLE vente (
+                       id_vente SERIAL PRIMARY KEY,
+                       id_voiture INT REFERENCES voiture(id_voiture),
+                       quantite INT NOT NULL,
+                       date_vente DATE DEFAULT CURRENT_DATE
 );
-
-alter table dish
-    add column if not exists price numeric(10, 2);
-
-alter table dish
-    rename column price to selling_price;
-
-alter table ingredient
-drop column if exists id_dish;
-
-alter table ingredient
-    add column if not exists required_quantity numeric(10, 2);
-
-alter table ingredient
-drop column if exists required_quantity;
-
-create type unit as enum ('PCS', 'KG', 'L');
-
-create table if not exists dish_ingredient
-(
-    id                serial primary key,
-    id_ingredient     int,
-    id_dish           int,
-    required_quantity numeric(10, 2),
-    unit              unit,
-    foreign key (id_ingredient) references ingredient (id),
-    foreign key (id_dish) references dish (id)
-    );
-
-create type movement_type as enum ('IN', 'OUT');
-
-create table if not exists stock_movement
-(
-    id                serial primary key,
-    id_ingredient     int,
-    quantity          numeric(10, 2),
-    unit              unit,
-    type              movement_type,
-    creation_datetime timestamp without time zone,
-    foreign key (id_ingredient) references ingredient (id)
-    );
-
-
-alter table ingredient
-    add column if not exists initial_stock numeric(10, 2);
-
-create table if not exists "order"
-(
-    id                serial primary key,
-    reference         varchar(255),
-    creation_datetime timestamp without time zone
-    );
-
-create table if not exists dish_order
-(
-    id       serial primary key,
-    id_order int references "order" (id),
-    id_dish  int references dish (id),
-    quantity int
-    );
-
--- Création des types ENUM pour l'examen
-CREATE TYPE order_type AS ENUM ('EAT_IN', 'TAKE_AWAY');
-CREATE TYPE order_status AS ENUM ('CREATED', 'READY', 'DELIVERED');
-
--- Mise à jour de la table "order"
-ALTER TABLE "order"
-    ADD COLUMN type order_type NOT NULL DEFAULT 'EAT_IN',
-ADD COLUMN status order_status NOT NULL DEFAULT 'CREATED';

@@ -1,25 +1,27 @@
+// Version finale Examen K2 - 2026
 package org.example;
 
-import org.example.repository.GarageRetriever;
-import org.example.model.StatsReparation;
+import org.example.repository.K2Repository;
 
 public class Main {
     public static void main(String[] args) {
-        GarageRetriever retriever = new GarageRetriever();
-        System.out.println("--- Question (a) ---");
-        for (StatsReparation s : retriever.findNombreReparationsParModele()) {
-            System.out.println(s.marque() + " " + s.modele() + " : " + s.nombreReparations());
-        }
-        System.out.println("\n--- Question (b) ---");
-        retriever.displayPourcentagesParModele();
-        System.out.println("\n--- Question (c) ---");
-        for (StatsReparation s : retriever.findCoutParMarqueEtMecanicien()) {
-            System.out.println(s.marque() + " | " + s.nomMecanicien() + " : " + s.montantTotal() + " Ar");
-        }
-        System.out.println("\n--- Question (d) ---");
-        StatsReparation moins = retriever.findMoinsRentable();
-        if (moins != null) {
-            System.out.println("Nom : " + moins.nomMecanicien() + " | Total : " + moins.montantTotal());
-        }
+        K2Repository repo = new K2Repository();
+
+        // 1. Test du Chiffre d'Affaires par Marque (Jointure)
+        System.out.println("=== CHIFFRE D'AFFAIRES PAR MARQUE (Push Down) ===");
+        repo.getChiffreAffairesParMarque().forEach(v ->
+                System.out.printf("Marque: %-10s | CA Total: %.2f €%n", v.marque(), v.chiffreAffaires())
+        );
+
+        System.out.println("\n");
+
+        // 2. Test du Tableau Pivot (Ventes par mois)
+        System.out.println("=== TABLEAU PIVOT DES VENTES (Quantités) ===");
+        System.out.println("Marque     | Janv | Févr | Mars");
+        System.out.println("-------------------------------");
+        repo.getVentesPivot().forEach(p ->
+                System.out.printf("%-10s | %4d | %4d | %4d%n",
+                        p.marque(), p.janvier(), p.fevrier(), p.mars())
+        );
     }
 }
